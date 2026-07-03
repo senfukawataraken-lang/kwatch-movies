@@ -1,0 +1,6 @@
+{
+  "name": "Kwatch Movies",
+  "description": "A comprehensive movie streaming platform featuring user profile lock, personalized streaming options, social watch party lobby, billing simulators, and a robust Admin and CMS control panel.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

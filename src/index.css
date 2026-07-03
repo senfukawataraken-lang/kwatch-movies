@@ -1,0 +1,187 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #050505;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0d0d;
+}
+::-webkit-scrollbar-thumb {
+  background: #262626;
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #404040;
+}
+
+/* Custom animation classes */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-spin-slow {
+  animation: spin 8s linear infinite;
+}
+
+/* --- GLOBAL LIGHT THEME HIGH-FIDELITY OVERRIDES --- */
+.light {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Base Body Override when light theme active */
+body:has(.light) {
+  background-color: #f1f5f9 !important;
+}
+
+/* Scrollbars overrides in light state */
+.light ::-webkit-scrollbar-track {
+  background: #f1f5f9 !important;
+}
+.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1 !important;
+}
+.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8 !important;
+}
+
+/* Background Color Translation Classes */
+.light .bg-\[\#07080c\],
+.light .bg-\[%2307080c\],
+.light .bg-\[\#0e1017\],
+.light .bg-\[\#0e1017\]\/95 {
+  background-color: #f1f5f9 !important;
+}
+
+.light .bg-\[\#0c0d13\]\/50,
+.light .bg-\[\#0c0d12\] {
+  background-color: #f8fafc !important;
+}
+
+.light .bg-\[\#0c0d12\]\/30,
+.light .bg-\[\#0c0d12\]\/40 {
+  background-color: rgba(248, 250, 252, 0.8) !important;
+}
+
+.light .bg-\[\#121319\],
+.light .bg-\[\#121319\]\/80,
+.light .bg-\[\#121319\]\/90,
+.light .bg-\[\#12131a\],
+.light .bg-\[\#151722\],
+.light .bg-\[\#151722\]\/50,
+.light .bg-\[\#141620\],
+.light .bg-\[\#1b1c2b\] {
+  background-color: #ffffff !important;
+}
+
+.light .bg-\[\#14151f\],
+.light .bg-\[\#181a25\] {
+  background-color: #f1f5f9 !important;
+}
+
+.light .bg-neutral-950,
+.light .bg-neutral-950\/80 {
+  background-color: rgba(248, 250, 252, 0.9) !important;
+}
+
+.light .bg-neutral-900,
+.light .bg-neutral-900\/60 {
+  background-color: #f1f5f9 !important;
+}
+
+/* Text Overrides for contrast */
+.light .text-neutral-100,
+.light .text-white,
+.light .text-neutral-200 {
+  color: #0f172a !important;
+}
+
+.light .text-neutral-300,
+.light .text-neutral-400 {
+  color: #334155 !important;
+}
+
+.light .text-neutral-500 {
+  color: #64748b !important;
+}
+
+/* Inputs and Forms styling */
+.light input {
+  color: #0f172a !important;
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+
+.light input::placeholder {
+  color: #94a3b8 !important;
+}
+
+.light select,
+.light option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+.light textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* Borders conversion to soft Slate 200 light splitters */
+.light .border-white\/\[0\.03\],
+.light .border-white\/\[0\.04\],
+.light .border-white\/\[0\.05\],
+.light .border-white\/5,
+.light .border-neutral-900,
+.light .border-\[\#151722\],
+.light .border-neutral-800,
+.light .border-neutral-850 {
+  border-color: #e2e8f0 !important;
+}
+
+/* Backdrop structures & glows adjustment to stay subtle as page shadows */
+.light .from-amber-600\/\[0\.04\],
+.light .from-purple-900\/\[0\.02\] {
+  opacity: 0.15 !important;
+}
+
+.light .shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Sidebar lists hover state */
+.light .hover\:bg-white\/\[0\.03\]:hover,
+.light .hover\:bg-white\/\[0\.02\]:hover {
+  background-color: rgba(15, 23, 42, 0.03) !important;
+}
+
+.light .hover\:bg-[#1b1c2b]:hover {
+  background-color: #f1f5f9 !important;
+}
+
