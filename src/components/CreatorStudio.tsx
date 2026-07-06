@@ -623,7 +623,7 @@ export default function CreatorStudio({ onRefreshMovies, onClose, movies }: Crea
                   <div className="space-y-1.5">
                     <span className="text-[10px] font-bold text-neutral-400 block">Streaming Movie URL Limit *</span>
                     <input
-                      type="url"
+                      type="text"
                       placeholder="Enter secure stream CDN link (e.g., https://.../stream.mp4)"
                       value={customVideoUrl}
                       onChange={(e) => setCustomVideoUrl(e.target.value)}
