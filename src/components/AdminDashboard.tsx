@@ -12,6 +12,11 @@ import {
 } from 'recharts';
 import { Movie, TranscodingJob, ContentGenre, Episode } from '../types';
 
+const resolveUrl = (val: string): string => {
+  if (!val) return '';
+  return val;
+};
+
 interface AdminDashboardProps {
   onRefreshMovies: () => void;
   movies: Movie[];
@@ -1762,8 +1767,8 @@ export default function AdminDashboard({ onRefreshMovies, movies }: AdminDashboa
                           <div>
                             <label className="block text-xs text-neutral-450 font-black uppercase tracking-wider mb-1">Direct Movie File URL (mp4, mkv, hls, m3u8 etc.) *</label>
                             <input
-                              type="url"
-                              placeholder="e.g. https://commondatastorage.googleapis.com/.../movie.mp4"
+                              type="text"
+                              placeholder="e.g. movies/filename.mp4 or https://commondatastorage.googleapis.com/.../movie.mp4"
                               value={newMovieVideoUrl}
                               onChange={(e) => setNewMovieVideoUrl(e.target.value)}
                               className="w-full bg-neutral-900 border border-neutral-800 text-xs px-3 py-2 rounded-lg text-white focus:border-orange-500/50 focus:outline-none mb-2"
@@ -1808,8 +1813,8 @@ export default function AdminDashboard({ onRefreshMovies, movies }: AdminDashboa
                           <div>
                             <label className="block text-xs text-neutral-450 font-black uppercase tracking-wider mb-1">Movie Trailer Video Link (URL)</label>
                             <input
-                              type="url"
-                              placeholder="e.g. https://commondatastorage.googleapis.com/.../trailer.mp4"
+                              type="text"
+                              placeholder="e.g. trailers/filename.mp4 or https://commondatastorage.googleapis.com/.../trailer.mp4"
                               value={newMovieTrailerUrl}
                               onChange={(e) => setNewMovieTrailerUrl(e.target.value)}
                               className="w-full bg-neutral-900 border border-neutral-800 text-xs px-3 py-2 rounded-lg text-white focus:border-orange-500/50 focus:outline-none mb-2"
@@ -1908,7 +1913,7 @@ export default function AdminDashboard({ onRefreshMovies, movies }: AdminDashboa
                               ) : newMoviePosterUrl ? (
                                 <div className="absolute inset-0 w-full h-full bg-black/50 group-hover:bg-black/70 flex flex-col items-center justify-center gap-1.5 transition-all text-white p-2">
                                   <img 
-                                    src={newMoviePosterUrl} 
+                                    src={resolveUrl(newMoviePosterUrl)} 
                                     alt="Poster Preview" 
                                     className="absolute inset-0 w-full h-full object-cover z-0" 
                                     referrerPolicy="no-referrer"
@@ -2000,7 +2005,7 @@ export default function AdminDashboard({ onRefreshMovies, movies }: AdminDashboa
                               ) : newMovieBannerUrl ? (
                                 <div className="absolute inset-0 w-full h-full bg-black/50 group-hover:bg-black/70 flex flex-col items-center justify-center gap-1.5 transition-all text-white p-2">
                                   <img 
-                                    src={newMovieBannerUrl} 
+                                    src={resolveUrl(newMovieBannerUrl)} 
                                     alt="Banner Preview" 
                                     className="absolute inset-0 w-full h-full object-cover z-0" 
                                     referrerPolicy="no-referrer"
@@ -2076,7 +2081,7 @@ export default function AdminDashboard({ onRefreshMovies, movies }: AdminDashboa
                         <tr key={m.id} className="hover:bg-neutral-900/30 transition-colors">
                           <td className="px-4 py-3 flex items-center gap-3">
                             <img 
-                              src={m.posterUrl} 
+                              src={resolveUrl(m.posterUrl)} 
                               alt="" 
                               className="w-8 h-12 object-cover rounded border border-neutral-800"
                               referrerPolicy="no-referrer"
