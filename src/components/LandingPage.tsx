@@ -19,10 +19,6 @@ interface LandingPageProps {
   movies: Movie[];
 }
 
-const previewMovies = movies
-  .filter((movie) => movie.posterUrl && movie.posterUrl.trim() !== "")
-  .slice(0, 8);
-
 const plans = [
   {
     name: "Free",
@@ -49,6 +45,10 @@ export default function LandingPage({
   onSignIn,
   movies,
 }: LandingPageProps) {
+  const previewMovies = movies
+    .filter((movie) => movie.posterUrl && movie.posterUrl.trim() !== "")
+    .slice(0, 8);
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#07080c] text-white">
       {/* Navigation */}
