@@ -478,7 +478,10 @@ export default function App() {
                   setIsNewDevice={setIsNewDevice}
                 />
   ) : (
-    <LandingPage onSignIn={() => setShowAuth(true)} />
+    <LandingPage
+  onSignIn={() => setShowAuth(true)}
+  movies={movies}
+/>
   )
               ) : (
                 <AnimatePresence mode="wait">

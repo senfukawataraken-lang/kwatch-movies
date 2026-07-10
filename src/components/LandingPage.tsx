@@ -12,36 +12,16 @@ import {
   Wifi,
 } from "lucide-react";
 
+import { Movie } from "../types";
+
 interface LandingPageProps {
   onSignIn: () => void;
+  movies: Movie[];
 }
 
-const previewMovies = [
-  {
-    title: "Bad Genius",
-    genre: "Thriller",
-    image:
-      "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    title: "Midnight Escape",
-    genre: "Action",
-    image:
-      "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    title: "African Stories",
-    genre: "Drama",
-    image:
-      "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    title: "Future World",
-    genre: "Sci-Fi",
-    image:
-      "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=600&q=80",
-  },
-];
+const previewMovies = movies
+  .filter((movie) => movie.posterUrl && movie.posterUrl.trim() !== "")
+  .slice(0, 8);
 
 const plans = [
   {
@@ -65,7 +45,10 @@ const plans = [
   },
 ];
 
-export default function LandingPage({ onSignIn }: LandingPageProps) {
+export default function LandingPage({
+  onSignIn,
+  movies,
+}: LandingPageProps) {
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#07080c] text-white">
       {/* Navigation */}
@@ -247,42 +230,30 @@ export default function LandingPage({ onSignIn }: LandingPageProps) {
           </div>
 
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            {previewMovies.map((movie) => (
-              <button
-                key={movie.title}
-                type="button"
-                onClick={onSignIn}
-                className="group overflow-hidden rounded-2xl border border-white/5 bg-neutral-900 text-left transition hover:-translate-y-1 hover:border-orange-500/30"
-              >
-                <div className="aspect-[2/3] overflow-hidden">
-                  <img
-                    src={movie.image}
-                    alt={movie.title}
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                  />
-                </div>
+           {previewMovies.map((movie) => (
+  <button
+    key={movie.id}
+    type="button"
+    onClick={onSignIn}
+    className="group overflow-hidden rounded-2xl border border-white/5 bg-neutral-900 text-left transition hover:-translate-y-1 hover:border-orange-500/30"
+  >
+    <div className="aspect-[2/3] overflow-hidden">
+      <img
+        src={movie.posterUrl}
+        alt={movie.title}
+        className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+        referrerPolicy="no-referrer"
+      />
+    </div>
 
-                <div className="p-4">
-                  <h3 className="font-bold text-white">{movie.title}</h3>
-                  <p className="mt-1 text-xs text-neutral-500">{movie.genre}</p>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-24">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8">
-          <div className="mx-auto mb-12 max-w-2xl text-center">
-            <span className="text-xs font-black uppercase tracking-[0.25em] text-orange-400">
-              Built for entertainment
-            </span>
-
-            <h2 className="mt-3 text-3xl font-black sm:text-4xl">
-              Watch wherever life takes you
-            </h2>
+    <div className="p-4">
+      <h3 className="font-bold text-white">{movie.title}</h3>
+      <p className="mt-1 text-xs text-neutral-500">
+        {movie.genres?.[0] || movie.type || "Movie"}
+      </p>
+    </div>
+  </button>
+))}
 
             <p className="mt-4 leading-7 text-neutral-400">
               One Kwatch account gives you access across supported devices,
