@@ -14,6 +14,7 @@ import AiAssistant from './components/AiAssistant';
 import ParentalControls from './components/ParentalControls';
 import KwatchLogo from './components/KwatchLogo';
 import ThemeInjector from './components/ThemeInjector';
+import LandingPage from './components/LandingPage';
 
 // Unified default profile configuration seeding
 const DEFAULT_PROFILES: UserProfile[] = [
@@ -87,6 +88,7 @@ export default function App() {
   // App views: 'portal' or 'admin'
   const [appView, setAppView] = useState<'portal' | 'admin'>('portal');
   const [isAiOpen, setIsAiOpen] = useState<boolean>(false);
+  const [showAuth, setShowAuth] = useState(false);
   const [isLoadingMovies, setIsLoadingMovies] = useState<boolean>(true);
   const [showParentalModal, setShowParentalModal] = useState<boolean>(false);
   const [watchPartyActive, setWatchPartyActive] = useState<boolean>(false);
@@ -462,6 +464,7 @@ export default function App() {
                   <p className="text-xs text-neutral-400 uppercase font-bold tracking-wider">Compiling supreme movie libraries...</p>
                 </div>
               ) : !currentProfile ? (
+  showAuth ? (
                 <AuthModal 
                   currentProfile={currentProfile}
                   onSelectProfile={handleSelectProfile}
@@ -474,6 +477,9 @@ export default function App() {
                   isNewDevice={isNewDevice}
                   setIsNewDevice={setIsNewDevice}
                 />
+  ) : (
+    <LandingPage onSignIn={() => setShowAuth(true)} />
+  )
               ) : (
                 <AnimatePresence mode="wait">
                   {appView === 'admin' ? (
