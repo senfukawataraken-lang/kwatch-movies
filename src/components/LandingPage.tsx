@@ -205,103 +205,128 @@ export default function LandingPage({
         </div>
       </section>
 
-      {/* Preview movies */}
-      <section className="border-y border-white/5 bg-neutral-950/40 py-20">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8">
-          <div className="mb-9 flex items-end justify-between gap-6">
-            <div>
-              <span className="text-xs font-black uppercase tracking-[0.25em] text-orange-400">
-                Discover
-              </span>
+     {/* Preview movies */}
+<section className="border-y border-white/5 bg-neutral-950/40 py-20">
+  <div className="mx-auto max-w-7xl px-5 sm:px-8">
+    <div className="mb-9 flex items-end justify-between gap-6">
+      <div>
+        <span className="text-xs font-black uppercase tracking-[0.25em] text-orange-400">
+          Discover
+        </span>
 
-              <h2 className="mt-2 text-3xl font-black sm:text-4xl">
-                Something for every mood
-              </h2>
+        <h2 className="mt-2 text-3xl font-black sm:text-4xl">
+          Something for every mood
+        </h2>
+      </div>
+
+      <button
+        type="button"
+        onClick={onSignIn}
+        className="hidden items-center gap-1 text-sm font-bold text-neutral-300 hover:text-white sm:flex"
+      >
+        Explore all
+        <ChevronRight className="h-4 w-4" />
+      </button>
+    </div>
+
+    {previewMovies.length > 0 ? (
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        {previewMovies.map((movie) => (
+          <button
+            key={movie.id}
+            type="button"
+            onClick={onSignIn}
+            className="group overflow-hidden rounded-2xl border border-white/5 bg-neutral-900 text-left transition hover:-translate-y-1 hover:border-orange-500/30"
+          >
+            <div className="aspect-[2/3] overflow-hidden">
+              <img
+                src={movie.posterUrl}
+                alt={movie.title}
+                className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                referrerPolicy="no-referrer"
+              />
             </div>
 
-            <button
-              type="button"
-              onClick={onSignIn}
-              className="hidden items-center gap-1 text-sm font-bold text-neutral-300 hover:text-white sm:flex"
-            >
-              Explore all
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
+            <div className="p-4">
+              <h3 className="font-bold text-white">{movie.title}</h3>
 
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-           {previewMovies.map((movie) => (
-  <button
-    key={movie.id}
-    type="button"
-    onClick={onSignIn}
-    className="group overflow-hidden rounded-2xl border border-white/5 bg-neutral-900 text-left transition hover:-translate-y-1 hover:border-orange-500/30"
-  >
-    <div className="aspect-[2/3] overflow-hidden">
-      <img
-        src={movie.posterUrl}
-        alt={movie.title}
-        className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-        referrerPolicy="no-referrer"
-      />
-    </div>
+              <p className="mt-1 text-xs text-neutral-500">
+                {movie.genres?.[0] || movie.type || "Movie"}
+              </p>
+            </div>
+          </button>
+        ))}
+      </div>
+    ) : (
+      <div className="rounded-2xl border border-white/5 bg-neutral-900/60 px-6 py-12 text-center">
+        <Film className="mx-auto h-8 w-8 text-orange-400" />
+        <p className="mt-4 text-sm text-neutral-400">
+          New movies are being prepared for the catalogue.
+        </p>
+      </div>
+    )}
+  </div>
+</section>
 
-    <div className="p-4">
-      <h3 className="font-bold text-white">{movie.title}</h3>
-      <p className="mt-1 text-xs text-neutral-500">
-        {movie.genres?.[0] || movie.type || "Movie"}
+{/* Features */}
+<section className="py-24">
+  <div className="mx-auto max-w-7xl px-5 sm:px-8">
+    <div className="mx-auto mb-12 max-w-2xl text-center">
+      <span className="text-xs font-black uppercase tracking-[0.25em] text-orange-400">
+        Built for entertainment
+      </span>
+
+      <h2 className="mt-3 text-3xl font-black sm:text-4xl">
+        Watch wherever life takes you
+      </h2>
+
+      <p className="mt-4 leading-7 text-neutral-400">
+        One Kwatch account gives you access across supported devices,
+        with personalized profiles and protected playback.
       </p>
     </div>
-  </button>
-))}
 
-            <p className="mt-4 leading-7 text-neutral-400">
-              One Kwatch account gives you access across supported devices,
-              with personalized profiles and protected playback.
-            </p>
+    <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+      {[
+        {
+          icon: MonitorPlay,
+          title: "High-quality streaming",
+          text: "Enjoy clear movie playback with secure cloud delivery.",
+        },
+        {
+          icon: Smartphone,
+          title: "Mobile ready",
+          text: "Use Kwatch Movies on Android phones, tablets and browsers.",
+        },
+        {
+          icon: Tv,
+          title: "Big-screen experience",
+          text: "Enjoy a cinematic interface designed for larger displays.",
+        },
+        {
+          icon: ShieldCheck,
+          title: "Protected access",
+          text: "Private media links and account controls help protect content.",
+        },
+      ].map((feature) => (
+        <div
+          key={feature.title}
+          className="rounded-3xl border border-white/5 bg-neutral-950 p-6 transition hover:border-orange-500/20"
+        >
+          <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-500/10 text-orange-400">
+            <feature.icon className="h-6 w-6" />
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-            {[
-              {
-                icon: MonitorPlay,
-                title: "High-quality streaming",
-                text: "Enjoy clear movie playback with secure cloud delivery.",
-              },
-              {
-                icon: Smartphone,
-                title: "Mobile ready",
-                text: "Use Kwatch Movies on Android phones, tablets and browsers.",
-              },
-              {
-                icon: Tv,
-                title: "Big-screen experience",
-                text: "Enjoy a cinematic interface designed for larger displays.",
-              },
-              {
-                icon: ShieldCheck,
-                title: "Protected access",
-                text: "Private media links and account controls help protect content.",
-              },
-            ].map((feature) => (
-              <div
-                key={feature.title}
-                className="rounded-3xl border border-white/5 bg-neutral-950 p-6 transition hover:border-orange-500/20"
-              >
-                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-500/10 text-orange-400">
-                  <feature.icon className="h-6 w-6" />
-                </div>
+          <h3 className="text-lg font-black">{feature.title}</h3>
 
-                <h3 className="text-lg font-black">{feature.title}</h3>
-
-                <p className="mt-3 text-sm leading-6 text-neutral-400">
-                  {feature.text}
-                </p>
-              </div>
-            ))}
-          </div>
+          <p className="mt-3 text-sm leading-6 text-neutral-400">
+            {feature.text}
+          </p>
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
 
       {/* Plans */}
       <section
