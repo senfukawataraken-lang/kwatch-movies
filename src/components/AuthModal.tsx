@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Lock, Plus, ShieldAlert, ArrowRight, ArrowLeft, Eye, EyeOff, RotateCw, Check, Shield, Palette
@@ -387,14 +387,32 @@ export default function AuthModal({
   };
 
   const hasSignedIn = currentAccount !== null;
+  const isPositiveNotice =
+    localError.startsWith("Your password has been successfully reset") ||
+    localError.startsWith("Pre-filled");
 
   return (
-    <div 
-      className="relative flex flex-col items-center justify-center min-h-[90vh] text-white p-4 sm:p-12 transition-all duration-700 w-full rounded-3xl overflow-hidden select-none shadow-[inset_0_0_120px_rgba(0,100,255,0.15)] bg-slate-950"
+    <div
+      className="relative flex min-h-[90vh] w-full select-none flex-col items-center justify-center overflow-hidden rounded-3xl bg-slate-950 p-4 text-white shadow-[inset_0_0_160px_rgba(76,29,149,0.22)] transition-all duration-700 sm:p-10"
       style={{
-        background: 'linear-gradient(135deg, #02081d 0%, #030a21 50%, #0c1c4e 100%)'
+        backgroundImage: `
+          radial-gradient(circle at 16% 18%, rgba(168,85,247,0.20), transparent 31%),
+          radial-gradient(circle at 84% 22%, rgba(37,99,235,0.22), transparent 34%),
+          radial-gradient(circle at 50% 100%, rgba(14,165,233,0.13), transparent 42%),
+          linear-gradient(115deg, rgba(2,6,23,0.98) 0%, rgba(7,8,20,0.94) 47%, rgba(15,23,42,0.98) 100%)
+        `
       }}
     >
+      {/* Cinematic depth, vignette and subtle film-grid layers */}
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.10),rgba(0,0,0,0.55))]" />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:linear-gradient(rgba(255,255,255,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.5)_1px,transparent_1px)] [background-size:72px_72px]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/55 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/70 to-transparent" />
+
+      {/* Decorative cinematic frames */}
+      <div className="pointer-events-none absolute -left-16 top-[16%] hidden h-52 w-80 -rotate-12 rounded-[2rem] border border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent shadow-2xl lg:block" />
+      <div className="pointer-events-none absolute -right-20 bottom-[11%] hidden h-56 w-96 rotate-12 rounded-[2rem] border border-purple-300/10 bg-gradient-to-br from-purple-500/[0.07] to-blue-500/[0.03] shadow-2xl lg:block" />
+
       {/* ------------------------------------------------------------- */}
       {/* ABSTRACT 3D FLUID SHAPES BACKDROP ARTWORK (MATCHING THE UPLOADED SPEC) */}
       {/* ------------------------------------------------------------- */}
@@ -744,7 +762,7 @@ export default function AuthModal({
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
-            className="w-full max-w-[420px] bg-white/10 backdrop-blur-xl border border-white/20 p-8 sm:p-10 rounded-[2.5rem] shadow-[0_25px_60px_rgba(0,0,0,0.5)] relative z-10 flex flex-col justify-between"
+            className="relative z-10 flex max-h-[calc(100vh-2rem)] w-full max-w-[460px] flex-col justify-between overflow-x-hidden overflow-y-auto rounded-[2rem] border border-white/10 bg-[#090b14]/88 p-7 shadow-[0_35px_110px_rgba(0,0,0,0.78)] backdrop-blur-3xl sm:p-10"
           >
             {/* Interactive Device Identity Simulator Badge */}
             <div className="absolute top-4 right-4 z-50">
@@ -770,35 +788,79 @@ export default function AuthModal({
               </button>
             </div>
 
-            {/* Center Dynamic Brand Logo */}
-            <div className="flex flex-col items-center justify-center mb-6">
-              <span className="text-[10px] uppercase font-mono tracking-[0.2em] text-cyan-400/90 font-bold mb-3">Welcome to</span>
-              <KwatchLogo size={72} includeText={true} layout="vertical" />
-            </div>
+            {/* Premium Kwatch branding */}
+<div className="flex flex-col items-center justify-center mb-8 pt-2">
+  <span className="mb-4 rounded-full border border-purple-400/20 bg-purple-500/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.3em] text-purple-300">
+    Welcome to
+  </span>
+
+  <div className="relative">
+    <div className="absolute inset-0 rounded-full bg-purple-600/25 blur-3xl scale-150" />
+
+    <div className="relative">
+      <KwatchLogo
+        size={82}
+        includeText={true}
+        layout="vertical"
+      />
+    </div>
+  </div>
+
+  <p className="mt-5 text-center text-xs leading-5 text-neutral-400">
+    Sign in and continue watching your favourite movies.
+  </p>
+</div>
 
             {/* Unrecognized Device Enforced Security Alert Notice */}
             {isNewDevice && (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="mb-4 p-3 bg-cyan-950/40 border border-cyan-500/20 rounded-2xl text-xs flex items-start gap-2.5 shadow-md backdrop-blur-md"
-              >
-                <Shield className="w-5 h-5 text-cyan-450 flex-shrink-0 mt-0.5" />
-                <div className="text-left leading-relaxed">
-                  <p className="font-extrabold text-cyan-300">New / Unrecognized Device</p>
-                  <p className="text-neutral-450 text-[10px] mt-0.5">Please sign in to register and authorize this device for streaming.</p>
-                </div>
-              </motion.div>
-            )}
+  <motion.div
+    initial={{ opacity: 0, y: -8 }}
+    animate={{ opacity: 1, y: 0 }}
+    className="
+      mb-5
+      flex
+      items-start
+      gap-3
+      rounded-2xl
+      border
+      border-amber-400/20
+      bg-amber-500/[0.07]
+      p-4
+      shadow-[0_12px_35px_rgba(0,0,0,0.18)]
+    "
+  >
+    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-500/10">
+      <Shield className="h-5 w-5 text-amber-300" />
+    </div>
+
+    <div className="text-left">
+      <p className="text-xs font-bold text-amber-200">
+        New device verification
+      </p>
+
+      <p className="mt-1 text-[11px] leading-5 text-neutral-400">
+        Sign in to securely authorize this device for Kwatch Movies streaming.
+      </p>
+    </div>
+  </motion.div>
+)}
 
             {/* Error notifications */}
             {localError && (
               <motion.div 
                 initial={{ opacity: 0, y: -5 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-5 p-3 bg-red-500/20 border border-red-500/40 rounded-xl text-yellow-300 text-xs text-center flex items-start gap-2.5 shadow-md"
+                className={`mb-5 flex items-start gap-2.5 rounded-xl border p-3 text-center text-xs shadow-md ${
+                  isPositiveNotice
+                    ? "border-emerald-400/30 bg-emerald-500/10 text-emerald-100"
+                    : "border-red-500/40 bg-red-500/15 text-red-100"
+                }`}
               >
-                <ShieldAlert className="w-4.5 h-4.5 text-red-400 flex-shrink-0 mt-0.5" />
+                {isPositiveNotice ? (
+                  <Check className="mt-0.5 h-4.5 w-4.5 flex-shrink-0 text-emerald-300" />
+                ) : (
+                  <ShieldAlert className="mt-0.5 h-4.5 w-4.5 flex-shrink-0 text-red-400" />
+                )}
                 <span className="text-left leading-relaxed font-medium">{localError}</span>
               </motion.div>
             )}
@@ -831,7 +893,9 @@ export default function AuthModal({
                         className="space-y-4"
                       >
                         <div>
-                          <label className="block text-xs font-semibold text-neutral-200 mb-1 ml-0.5">Account Email Address</label>
+                          <label className="mb-2 block text-sm font-semibold tracking-wide text-neutral-300">
+  Email Address
+</label>
                           <input
                             type="email"
                             required
@@ -1059,26 +1123,36 @@ export default function AuthModal({
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
                   onSubmit={handleLoginSubmit}
-                  className="space-y-4"
+                  className="space-y-5"
                 >
-                  <h3 className="text-2xl font-bold text-white text-left tracking-wide mb-1">Login</h3>
+                  <div className="text-left">
+                    <h3 className="text-2xl font-bold tracking-wide text-white">Sign in</h3>
+                    <p className="mt-1 text-xs leading-5 text-neutral-400">
+                      Enter your account details to continue watching.
+                    </p>
+                  </div>
 
-                  <div className="space-y-4 text-left">
+                  <div className="space-y-5 text-left">
                     <div>
-                      <label className="block text-xs font-semibold text-neutral-200 mb-1 ml-0.5">Email</label>
+                      <label className="mb-2 block text-sm font-semibold tracking-wide text-neutral-300">
+                        Email Address
+                      </label>
                       <input
                         type="email"
                         required
+                        autoComplete="email"
                         value={emailLogin}
-                        placeholder="username@gmail.com"
+                        placeholder="Enter your email address"
                         onChange={(e) => setEmailLogin(e.target.value)}
-                        className="h-10 w-full px-4 rounded-lg bg-white text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 placeholder-neutral-400 shadow-xl transition-all"
+                        className="h-12 w-full rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white outline-none transition-all placeholder:text-neutral-500 focus:border-purple-500 focus:bg-white/10 focus:ring-4 focus:ring-purple-500/20"
                       />
                     </div>
 
                     <div>
-                      <div className="flex justify-between items-center mb-1">
-                        <label className="block text-xs font-semibold text-neutral-200 ml-0.5">Password</label>
+                      <div className="mb-2 flex items-center justify-between">
+                        <label className="block text-sm font-semibold tracking-wide text-neutral-300">
+                          Password
+                        </label>
                         <button
                           type="button"
                           onClick={() => {
@@ -1089,27 +1163,34 @@ export default function AuthModal({
                               setForgotEmail(emailLogin);
                             }
                           }}
-                          className="text-[11px] text-cyan-300 hover:underline cursor-pointer"
+                          className="text-xs font-semibold text-purple-300 transition-colors hover:text-purple-200 hover:underline"
                         >
                           Forgot Password?
                         </button>
                       </div>
 
-                      <div className="relative flex items-center">
+                      <div className="relative">
                         <input
                           type={showPasswordRaw ? "text" : "password"}
                           required
+                          autoComplete="current-password"
                           value={passLogin}
-                          placeholder="Password"
+                          placeholder="Enter your password"
                           onChange={(e) => setPassLogin(e.target.value)}
-                          className="h-10 w-full px-4 rounded-lg bg-white text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 placeholder-neutral-400 pr-10 shadow-xl transition-all"
+                          className="h-12 w-full rounded-xl border border-white/10 bg-white/5 px-4 pr-12 text-sm text-white outline-none transition-all placeholder:text-neutral-500 focus:border-purple-500 focus:bg-white/10 focus:ring-4 focus:ring-purple-500/20"
                         />
                         <button
                           type="button"
-                          onClick={() => setShowPasswordRaw(prev => !prev)}
-                          className="absolute right-3 text-slate-400 hover:text-slate-700"
+                          onClick={() => setShowPasswordRaw((current) => !current)}
+                          className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-neutral-400 transition-colors hover:text-white"
+                          aria-label={showPasswordRaw ? "Hide password" : "Show password"}
+                          title={showPasswordRaw ? "Hide password" : "Show password"}
                         >
-                          {showPasswordRaw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          {showPasswordRaw ? (
+                            <EyeOff className="h-5 w-5" />
+                          ) : (
+                            <Eye className="h-5 w-5" />
+                          )}
                         </button>
                       </div>
                     </div>
@@ -1118,32 +1199,38 @@ export default function AuthModal({
                   <button
                     type="submit"
                     disabled={isAuthenticating}
-                    className="w-full h-11 bg-[#0B3A64] hover:bg-[#07243f] text-white font-bold text-sm rounded-lg transition-all shadow-xl flex items-center justify-center gap-2 mt-5 active:scale-95 disabled:opacity-50"
+                    className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 text-sm font-extrabold text-white shadow-[0_14px_35px_rgba(124,58,237,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-[0_18px_45px_rgba(124,58,237,0.5)] active:translate-y-0 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {isAuthenticating ? (
-                      <RotateCw className="w-4 h-4 animate-spin" />
+                      <>
+                        <RotateCw className="h-4 w-4 animate-spin" />
+                        <span>Signing in...</span>
+                      </>
                     ) : (
-                      <span>Sign in</span>
+                      <>
+                        <span>Sign In</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </>
                     )}
                   </button>
 
-                  {/* Divider */}
-                  <div className="flex items-center my-4">
-                    <div className="flex-grow h-[1px] bg-white/10" />
-                    <span className="px-3 text-[10px] text-neutral-300 uppercase tracking-widest font-semibold">or continue with</span>
-                    <div className="flex-grow h-[1px] bg-white/10" />
+                  <div className="flex items-center py-1">
+                    <div className="h-px flex-grow bg-white/10" />
+                    <span className="px-3 text-[10px] font-semibold uppercase tracking-widest text-neutral-400">
+                      or continue with
+                    </span>
+                    <div className="h-px flex-grow bg-white/10" />
                   </div>
 
-                  {/* Social sign ins (Google, Github, Facebook) as requested by screenshot style */}
                   <div className="grid grid-cols-3 gap-3">
-                    <button 
+                    <button
                       type="button"
                       onClick={() => handleSocialClick("Google")}
-                      className="h-10 flex items-center justify-center bg-white hover:bg-neutral-100 rounded-lg shadow-md transition-all active:scale-95 text-xs text-neutral-600"
+                      className="flex h-11 items-center justify-center rounded-xl border border-white/10 bg-white transition-all hover:-translate-y-0.5 hover:bg-neutral-100 active:scale-95"
                       title="Google One-Click Fast Login"
+                      aria-label="Continue with Google"
                     >
-                      {/* Social colored G icon */}
-                      <svg className="w-5 h-5" viewBox="0 0 24 24">
+                      <svg className="h-5 w-5" viewBox="0 0 24 24">
                         <path fill="#EA4335" d="M12 5.04c1.62-.01 3.19.57 4.38 1.63L20 3.1C17.75 1.07 14.94-.03 12 0 7.24-.03 3.1 3.1 1.45 7.55L5.4 10.6c.8-2.35 2.97-4.14 5.6-5.56z" />
                         <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.55-.19-2.3H12v4.51h6.47c-.29 1.5-.1.8-1.57 2.66l3.9 3.03c2.28-2.1 3.69-5.18 3.69-7.9z" />
                         <path fill="#FBBC05" d="M5.4 10.6c-.4 1.1-.6 2.2-.6 3.4s.2 2.3.6 3.4l-3.95 3.05C.53 17.55 0 14.85 0 12s.53-5.55 1.45-8.45l3.95 3.05z" />
@@ -1151,31 +1238,32 @@ export default function AuthModal({
                       </svg>
                     </button>
 
-                    <button 
+                    <button
                       type="button"
                       onClick={() => handleSocialClick("GitHub")}
-                      className="h-10 flex items-center justify-center bg-white hover:bg-neutral-100 rounded-lg shadow-md transition-all active:scale-95"
+                      className="flex h-11 items-center justify-center rounded-xl border border-white/10 bg-white transition-all hover:-translate-y-0.5 hover:bg-neutral-100 active:scale-95"
                       title="GitHub One-Click Fast Login"
+                      aria-label="Continue with GitHub"
                     >
-                      {/* White-dark git icon */}
-                      <svg className="w-5 h-5 fill-slate-800" viewBox="0 0 24 24">
+                      <svg className="h-5 w-5 fill-slate-800" viewBox="0 0 24 24">
                         <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.024A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.293 2.747-1.024 2.747-1.024.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
                       </svg>
                     </button>
 
-                    <button 
+                    <button
                       type="button"
                       onClick={() => handleSocialClick("Facebook")}
-                      className="h-10 flex items-center justify-center bg-white hover:bg-neutral-100 rounded-lg shadow-md transition-all active:scale-95"
+                      className="flex h-11 items-center justify-center rounded-xl border border-white/10 bg-white transition-all hover:-translate-y-0.5 hover:bg-neutral-100 active:scale-95"
                       title="Facebook One-Click Fast Login"
+                      aria-label="Continue with Facebook"
                     >
-                      <svg className="w-5 h-5 fill-[#1877F2]" viewBox="0 0 24 24">
+                      <svg className="h-5 w-5 fill-[#1877F2]" viewBox="0 0 24 24">
                         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                       </svg>
                     </button>
                   </div>
 
-                  <div className="text-center pt-5 text-xs text-neutral-300">
+                  <div className="pt-2 text-center text-xs text-neutral-400">
                     <span>Don't have an account yet? </span>
                     <button
                       type="button"
@@ -1183,7 +1271,7 @@ export default function AuthModal({
                         setIsSignUp(true);
                         setLocalError("");
                       }}
-                      className="text-cyan-300 hover:underline font-bold transition-all"
+                      className="font-bold text-purple-300 transition-colors hover:text-purple-200 hover:underline"
                     >
                       Register for free
                     </button>
@@ -1191,6 +1279,13 @@ export default function AuthModal({
                 </motion.form>
               )}
             </AnimatePresence>
+
+            {!isForgotPassword && !isSignUp && (
+              <div className="mt-7 flex items-center justify-center gap-2 border-t border-white/10 pt-5 text-[10px] font-medium uppercase tracking-[0.18em] text-neutral-500">
+                <Shield className="h-3.5 w-3.5 text-purple-400" />
+                <span>Protected streaming · Private playback</span>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
