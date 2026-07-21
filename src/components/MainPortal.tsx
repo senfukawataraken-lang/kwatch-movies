@@ -99,6 +99,37 @@ export default function MainPortal({
     return true;
   });
 
+  // Premium home-screen genre order. These rows stay visible even before movies are added.
+  const HOME_GENRES = [
+    "Action",
+    "Comedy",
+    "Horror",
+    "Romance",
+    "Sci-Fi",
+    "Adventure",
+    "Animation",
+    "Family",
+    "Drama",
+    "Thriller",
+    "Documentary",
+    "VJ Translation",
+  ];
+
+  // Keep the requested genres first, then append any extra genres created in Admin.
+  const catalogGenres = Array.from(
+    new Set(
+      filteredMovies.flatMap(movie =>
+        (movie.genres || []).map(genre => genre.trim()).filter(Boolean)
+      )
+    )
+  );
+  const availableGenres = [
+    ...HOME_GENRES,
+    ...catalogGenres.filter(
+      genre => !HOME_GENRES.some(homeGenre => homeGenre.toLowerCase() === genre.toLowerCase())
+    ).sort((a, b) => a.localeCompare(b)),
+  ];
+
   // Sliding Hero Carousel
   const featuredMovies = filteredMovies.filter(m => m.isFeatured || m.isPopular || m.rating >= 4.5).slice(0, 5);
   const [heroIndex, setHeroIndex] = useState(0);
@@ -1875,12 +1906,13 @@ Enjoy viewing your high-speed, offline-rendered premium content directly from yo
         </div>
       ) : (
         /* STANDARD NETFLIX-LIKE FEED (Carousel / Hero banner) */
-        <div className="space-y-12">
+        <div className="space-y-10 sm:space-y-14 pb-16">
           
           {/* HERO FEATURED BILLBOARD */}
           {featuredMovie && (
-            <div className="relative min-h-[460px] rounded-3xl overflow-hidden shadow-2xl border border-neutral-900 bg-neutral-950 flex flex-col justify-end p-6 sm:p-12 group/hero animate-fade-in">
-              <div className="absolute inset-0 bg-linear-to-t from-neutral-950 via-neutral-950/40 to-transparent z-10" />
+            <div className="relative min-h-[520px] sm:min-h-[590px] -mx-4 sm:mx-0 sm:rounded-[2rem] overflow-hidden shadow-2xl border-y sm:border border-neutral-800/80 bg-neutral-950 flex flex-col justify-end p-6 sm:p-12 lg:p-16 group/hero animate-fade-in">
+              <div className="absolute inset-0 bg-linear-to-r from-black via-black/55 to-transparent z-10" />
+              <div className="absolute inset-0 bg-linear-to-t from-neutral-950 via-transparent to-black/15 z-10" />
               
               {/* SLIDING CANVAS IMAGES */}
               <AnimatePresence mode="popLayout">
@@ -1980,6 +2012,20 @@ Enjoy viewing your high-speed, offline-rendered premium content directly from yo
               </div>
             </div>
           )}
+
+          {/* QUICK GENRE NAVIGATION */}
+          <div className="flex gap-2.5 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
+            {HOME_GENRES.map((genre) => (
+              <button
+                key={genre}
+                type="button"
+                onClick={() => setSelectedGenre(genre)}
+                className="shrink-0 rounded-full border border-neutral-800 bg-neutral-900/80 px-4 py-2 text-xs font-bold text-neutral-200 hover:border-orange-500/60 hover:bg-orange-500 hover:text-white transition-all"
+              >
+                {genre}
+              </button>
+            ))}
+          </div>
 
           {/* SECTION 1: CONTINUE WATCHING */}
           <div className="space-y-4">
@@ -2112,6 +2158,93 @@ Enjoy viewing your high-speed, offline-rendered premium content directly from yo
                 ))}
             </div>
           </div>
+
+          {/* PREMIUM GENRE SHELVES */}
+          <section className="space-y-10">
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-orange-500">Explore Kwatch</p>
+                <h3 className="mt-1 text-xl sm:text-2xl font-black tracking-tight text-white">Movies by genre</h3>
+                <p className="mt-1 text-xs text-neutral-500">Your catalog updates these shelves automatically after every upload.</p>
+              </div>
+            </div>
+
+            {availableGenres.map((genre) => {
+              const genreMovies = filteredMovies.filter(movie =>
+                (movie.genres || []).some(movieGenre =>
+                  movieGenre.toLowerCase() === genre.toLowerCase()
+                )
+              );
+
+              return (
+                <div key={genre} className="space-y-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span className="h-6 w-1 rounded-full bg-orange-500" />
+                      <h4 className="truncate text-base sm:text-lg font-extrabold text-white">{genre}</h4>
+                      <span className="rounded-full bg-neutral-900 px-2 py-0.5 text-[10px] font-bold text-neutral-500">
+                        {genreMovies.length}
+                      </span>
+                    </div>
+                    {genreMovies.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setSelectedGenre(genre)}
+                        className="shrink-0 text-xs font-bold text-neutral-400 hover:text-orange-400 flex items-center gap-1 transition-colors"
+                      >
+                        See all <ChevronRight className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+
+                  {genreMovies.length > 0 ? (
+                    <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+                      {genreMovies.slice(0, 12).map((movie) => (
+                        <motion.button
+                          type="button"
+                          key={`${genre}-${movie.id}`}
+                          whileHover={{ y: -6 }}
+                          onClick={() => setSelectedMovie(movie)}
+                          className="group relative w-[145px] sm:w-[175px] md:w-[190px] shrink-0 snap-start overflow-hidden rounded-2xl border border-neutral-900 bg-neutral-950 text-left shadow-lg hover:border-orange-500/40 hover:shadow-orange-950/30 transition-colors"
+                        >
+                          <div className="relative aspect-[2/3] overflow-hidden bg-neutral-900">
+                            <img
+                              src={movie.posterUrl}
+                              alt={movie.title}
+                              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              referrerPolicy="no-referrer"
+                            />
+                            <div className="absolute inset-0 bg-linear-to-t from-black via-black/5 to-transparent opacity-80" />
+                            {renderDownloadStatusBadge(movie)}
+                            <div className="absolute inset-x-3 bottom-3 flex items-center justify-between">
+                              <span className="rounded-md bg-black/75 px-2 py-1 text-[10px] font-black text-amber-300 backdrop-blur">★ {movie.rating}</span>
+                              <span className="rounded-md bg-black/75 px-2 py-1 text-[9px] font-bold text-white backdrop-blur">{movie.maturityRating || 'PG'}</span>
+                            </div>
+                          </div>
+                          <div className="p-3.5">
+                            <strong className="block truncate text-sm font-bold text-white">{movie.title}</strong>
+                            <div className="mt-1.5 flex items-center justify-between gap-2 text-[10px] text-neutral-500">
+                              <span className="truncate">{movie.releaseDate?.slice(0, 4) || 'New'}</span>
+                              <span className="shrink-0">{movie.runtime}</span>
+                            </div>
+                          </div>
+                        </motion.button>
+                      ))}
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedGenre(genre)}
+                      className="w-full rounded-2xl border border-dashed border-neutral-800 bg-neutral-950/40 px-5 py-6 text-left hover:border-orange-500/40 hover:bg-neutral-900/60 transition-all"
+                    >
+                      <span className="text-sm font-bold text-neutral-300">{genre} shelf ready</span>
+                      <span className="mt-1 block text-xs text-neutral-600">Upload a movie and assign “{genre}” in the Admin Dashboard to fill this row.</span>
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </section>
 
           {/* SECTION 3: TRENDING RELEASES */}
           <div className="space-y-4">
