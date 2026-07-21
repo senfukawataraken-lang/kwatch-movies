@@ -2074,7 +2074,46 @@ Enjoy viewing your high-speed, offline-rendered premium content directly from yo
             </div>
           )}
 
-          {/* SECTION 2: TRENDING RELEASES */}
+          {/* SECTION 2: RECENTLY ADDED — always shows newly uploaded movies */}
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h3 className="text-sm font-bold text-neutral-400 tracking-widest uppercase">Recently Added</h3>
+              <span className="text-xs text-purple-400 flex items-center gap-0.5">Latest uploads <ChevronRight className="w-3 h-3" /></span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4">
+              {[...filteredMovies]
+                .sort((a, b) => {
+                  const aTime = Number(a.id.replace(/\D/g, "")) || Date.parse(a.releaseDate || "") || 0;
+                  const bTime = Number(b.id.replace(/\D/g, "")) || Date.parse(b.releaseDate || "") || 0;
+                  return bTime - aTime;
+                })
+                .slice(0, 10)
+                .map((movie) => (
+                  <div
+                    key={movie.id}
+                    onClick={() => setSelectedMovie(movie)}
+                    className="group bg-neutral-950 rounded-xl overflow-hidden border border-neutral-900 cursor-pointer hover:border-purple-500/30 transform hover:-translate-y-1 transition-all relative"
+                  >
+                    <img
+                      src={movie.posterUrl}
+                      alt={movie.title}
+                      className="w-full h-48 object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                    {renderDownloadStatusBadge(movie)}
+                    <div className="p-3">
+                      <strong className="block text-xs sm:text-sm font-semibold truncate text-white mt-1">{movie.title}</strong>
+                      <div className="flex justify-between items-center text-[10px] text-neutral-400 mt-2">
+                        <span>★ {movie.rating}</span>
+                        <span className="text-neutral-500">{movie.runtime}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          {/* SECTION 3: TRENDING RELEASES */}
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-sm font-bold text-neutral-400 tracking-widest uppercase">Trending Movies</h3>
@@ -2101,7 +2140,7 @@ Enjoy viewing your high-speed, offline-rendered premium content directly from yo
             </div>
           </div>
 
-          {/* SECTION 3: MY WATCHLIST */}
+          {/* SECTION 4: MY WATCHLIST */}
           {watchlist.length > 0 && (
             <div className="space-y-4">
               <h3 className="text-sm font-bold text-neutral-400 tracking-widest uppercase flex items-center gap-1.5 text-white">
