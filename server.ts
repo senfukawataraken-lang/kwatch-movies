@@ -346,16 +346,25 @@ app.post("/api/ads/record", async (req: Request, res: Response) => {
 // Helper to extract the object key from a full Backblaze B2 S3 URL (backwards compatible if full URL is stored)
 function getB2Key(value: string): string | null {
   if (!value) return null;
-  if (value.startsWith("http://") || value.startsWith("https://")) {
-    try {
+
+  try {
+    if (value.startsWith("http://") || value.startsWith("https://")) {
       const url = new URL(value);
-      const key = url.pathname.startsWith("/") ? url.pathname.slice(1) : url.pathname;
-      return key;
-    } catch {
-      return null;
+      const encodedKey = url.pathname.startsWith("/")
+        ? url.pathname.slice(1)
+        : url.pathname;
+
+      // Decode URL-encoded characters once before passing the key to the AWS SDK.
+      // This prevents spaces such as %20 from being encoded again as %2520.
+      return decodeURIComponent(encodedKey);
     }
+
+    // The value is already an object key. Decode it once in case it was saved
+    // with URL-encoded characters.
+    return decodeURIComponent(value);
+  } catch {
+    return null;
   }
-  return value; // Already the object key
 }
 
 // Helper to ensure a movie exists in the database. Dynamically inserts from seed list if missing.
