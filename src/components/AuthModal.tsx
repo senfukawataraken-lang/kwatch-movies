@@ -364,32 +364,9 @@ export default function AuthModal({
     setShowCreateForm(false);
   };
 
-  const handleSocialClick = (platformName: string) => {
-    // Fill details with test accounts instantly and friendly notification
-    if (platformName === "Google") {
-      setEmailLogin("senfukawataraken@gmail.com");
-      setPassLogin("41823");
-      setLocalError("Pre-filled Google credential pathway (admin@kwatch.com / senfukawataraken@gmail.com is loaded). Click 'Sign in' below.");
-    } else if (platformName === "GitHub") {
-      setEmailLogin("admin@kwatch.com");
-      setPassLogin("41823");
-      setLocalError("Pre-filled GitHub administrator gateway loaded. Click 'Sign in' below.");
-    } else {
-      setEmailLogin("customer@kwatch.com");
-      setPassLogin("1234");
-      // Create user if not existing
-      const accounts = getRegisteredAccounts();
-      if (!accounts.find(a => a.email === "customer@kwatch.com")) {
-        saveRegisteredAccount({ email: "customer@kwatch.com", name: "Guest Watcher", password: "1234", isAdmin: false });
-      }
-      setLocalError("Pre-filled social pathway loaded (customer@kwatch.com with password '1234'). Click 'Sign in'.");
-    }
-  };
-
   const hasSignedIn = currentAccount !== null;
   const isPositiveNotice =
-    localError.startsWith("Your password has been successfully reset") ||
-    localError.startsWith("Pre-filled");
+    localError.startsWith("Your password has been successfully reset");
 
   return (
     <div
@@ -1213,55 +1190,6 @@ export default function AuthModal({
                       </>
                     )}
                   </button>
-
-                  <div className="flex items-center py-1">
-                    <div className="h-px flex-grow bg-white/10" />
-                    <span className="px-3 text-[10px] font-semibold uppercase tracking-widest text-neutral-400">
-                      or continue with
-                    </span>
-                    <div className="h-px flex-grow bg-white/10" />
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => handleSocialClick("Google")}
-                      className="flex h-11 items-center justify-center rounded-xl border border-white/10 bg-white transition-all hover:-translate-y-0.5 hover:bg-neutral-100 active:scale-95"
-                      title="Google One-Click Fast Login"
-                      aria-label="Continue with Google"
-                    >
-                      <svg className="h-5 w-5" viewBox="0 0 24 24">
-                        <path fill="#EA4335" d="M12 5.04c1.62-.01 3.19.57 4.38 1.63L20 3.1C17.75 1.07 14.94-.03 12 0 7.24-.03 3.1 3.1 1.45 7.55L5.4 10.6c.8-2.35 2.97-4.14 5.6-5.56z" />
-                        <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.55-.19-2.3H12v4.51h6.47c-.29 1.5-.1.8-1.57 2.66l3.9 3.03c2.28-2.1 3.69-5.18 3.69-7.9z" />
-                        <path fill="#FBBC05" d="M5.4 10.6c-.4 1.1-.6 2.2-.6 3.4s.2 2.3.6 3.4l-3.95 3.05C.53 17.55 0 14.85 0 12s.53-5.55 1.45-8.45l3.95 3.05z" />
-                        <path fill="#34A853" d="M12 23.97c3.24 0 5.97-1.07 7.96-2.91l-3.9-3.03c-1.12.75-2.54 1.19-4.06 1.19-2.63 0-4.81-1.79-5.6-4.14L1.45 18.13C3.1 22.58 7.24 25.7 12 25.7v-1.73z" />
-                      </svg>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleSocialClick("GitHub")}
-                      className="flex h-11 items-center justify-center rounded-xl border border-white/10 bg-white transition-all hover:-translate-y-0.5 hover:bg-neutral-100 active:scale-95"
-                      title="GitHub One-Click Fast Login"
-                      aria-label="Continue with GitHub"
-                    >
-                      <svg className="h-5 w-5 fill-slate-800" viewBox="0 0 24 24">
-                        <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.024A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.293 2.747-1.024 2.747-1.024.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
-                      </svg>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleSocialClick("Facebook")}
-                      className="flex h-11 items-center justify-center rounded-xl border border-white/10 bg-white transition-all hover:-translate-y-0.5 hover:bg-neutral-100 active:scale-95"
-                      title="Facebook One-Click Fast Login"
-                      aria-label="Continue with Facebook"
-                    >
-                      <svg className="h-5 w-5 fill-[#1877F2]" viewBox="0 0 24 24">
-                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                      </svg>
-                    </button>
-                  </div>
 
                   <div className="pt-2 text-center text-xs text-neutral-400">
                     <span>Don't have an account yet? </span>
